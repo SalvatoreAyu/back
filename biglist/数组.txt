@@ -1,0 +1,167 @@
+                                               选择法
+#include <stdio.h>
+#include <stdlib.h>
+#define N 40
+int main()
+{
+    int paixu[N];
+    int n,i,j,k,t;
+    printf("请输入总个数");
+    scanf("%d",&n);
+    for (i=0;i<n;i++)
+    {
+        printf("请输入第%d个数",i+1);
+        scanf("%d",&paixu[i]);
+    }
+    for (i=0;i<n-1;i++)
+    {
+        k=i;
+        for (j=i+1;j<n;j++)
+        {
+            if (paixu[j]<paixu[k])
+            {
+                k=j;
+            }
+        }
+        if (k != i)
+        {
+            t=paixu[k];
+            paixu[k]=paixu[i];
+            paixu[i]=t;
+        }
+    }
+    for (i=0;i<n;i++)
+    {
+        printf("%d  ",paixu[i]);
+    }
+}
+                                           冒泡法
+#include  <stdio.h>
+#define SIZE 10
+main( )
+{ int  i, j, t, a[SIZE];
+   printf("input  10  numbers: \n");
+   for(i = 0;i < SIZE;i++) 
+         scanf("%d", &a[i]); 
+   printf("\n");
+   for (i = 0; i< SIZE; i++) 
+       for (j = SIZE - 1; j >= i + 1; j--)
+           if (a[j] < a[j-1])  
+           {
+        t=a[j];  
+        a[j]=a[j-1]; 
+        a[j-1]=t;    
+        }
+ for (i = 0; i < SIZE; i++)
+      printf("%d\n", a[i]);
+}
+                                                
+#include  <stdio.h>
+#include  <stdlib.h>
+int main()
+{
+    int m;
+    int i, j;
+    int flag;
+    int a[9] = {0};
+    for (m = 123; m <= 333; m++)
+    {
+        flag = 0;
+
+        a[0] = m / 100;
+        a[1] = (m % 100) / 10;
+        a[2] = m % 10;
+
+        a[3] = (m * 2) / 100;
+        a[4] = ((m * 2) % 100) / 10;
+        a[5] = (m * 2) % 10;
+
+        a[6] = (m * 3) / 100;
+        a[7] = ((m * 3) % 100) / 10;
+        a[8] = (m * 3) % 10;
+
+        for (i = 0; i < 9; i++)
+        {
+            for (j = 0; j < 9; j++)
+            {
+                if (i != j && a[i] == a[j])
+                {
+                    flag = 1;
+                }
+            }
+            if (a[i] == 0)
+            {
+                flag = 1;
+            }
+        }
+        if (flag == 0)
+        {
+            printf("%d,%d,%d\n", m, m * 2, m * 3);
+        }
+    }
+    return 0;
+}
+年月份
+#include <stdio.h>
+void  MonthDay(int year, int yearDay);
+void  DayofYear(int year, int month, int day);
+void  DayofYear(int year, int month, int day)
+{
+    printf("Please enter year, month, day:");
+    scanf("%d,%d,%d",&year,&month,&day);
+    int s=0,i,a[13]= {0,31,28,31,30,31,30,31,31,30,31,30,31};
+    if((year%4==0&&year%100!=0) || year%400==0)
+        a[2]=29;
+    for(i=1; i<month; i++)
+        s+=a[i];
+    s=s+day;
+    printf("yearDay = %d\n",s);
+}
+int main()
+{
+    int year,month,day,yearday;
+    printf("1. year/month/day -> yearDay\n");
+    printf("2. yearDay -> year/month/day\n");
+    printf("3. Exit\n");
+    printf("Please enter your choice:");
+    int x;
+    scanf("%d",&x);
+    switch(x)
+    {
+    case 1:
+        DayofYear( year,  month,  day);
+        break;
+    case 2:
+        MonthDay (year,yearday);
+        break;
+    case 3:
+        return 0;
+    }
+
+}
+void  MonthDay(int year, int yearDay)
+{
+    printf("Please enter year, yearDay:");
+    scanf("%d,%d",&year,&yearDay);
+    int i=1,a[13]= {0,31,28,31,30,31,30,31,31,30,31,30,31},m=0,d;
+    if((year%4==0&&year%100!=0) || year%400==0)
+    {
+        a[2]=29;
+    }
+    for(i=1; i<13; i++)
+    {
+        d=yearDay-a[i];
+        if(d>0)
+        {
+            yearDay=d;
+            m++;//月数加1
+        }
+        else
+        {
+            d = d+a[i];
+            break;
+        }
+    }
+    printf("month = %d, day = %d\n",m+1,d);
+}
+

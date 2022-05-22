@@ -1,0 +1,145 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct node
+{
+     int data;
+     struct node * prior;
+     struct node * next;
+};
+struct node * createlist()
+{
+    struct node * head=(struct node *)malloc(sizeof(struct node ));
+    head->next=head;
+    head->prior=head;
+    return head;
+};
+struct node * createnode (int data)
+{
+    struct node *newnode =(struct node *)malloc( sizeof(struct node ));
+    newnode->next=newnode->prior=NULL;
+    newnode->data=data;
+    return newnode;
+};
+/*void insertbyhead(struct node *head,int data) //头插法
+{
+    struct node *newnode=createnode(data);
+    newnode->prior=head;
+    newnode->next=head->next;
+    head->next->prior=newnode;
+    head->next=newnode;
+}*/
+void insertbytail(struct node *head,int data) //尾插法
+{
+    struct node *newnode=createnode(data);
+    struct node *last=head;
+    while (last->next!=head)
+    {
+        last=last->next;
+    }
+    newnode->prior=last;
+    newnode->next=head;
+    head->prior=newnode;
+    last->next=newnode; //前驱后继->后继前驱->前去后继
+    /*head->prior=newnode;
+    newnode->next=head;
+    newnode->prior=last;
+    last->next=newnode;*/ //另一插法
+}
+int numdelete(struct node *head,int posdata)
+{
+    struct node *posnode=head->next;
+    int num=0;
+    while (posnode!=head)
+    {
+        if (posnode->data==posdata)
+        {
+            num++;
+        }
+        posnode=posnode->next;
+    }
+    return num;
+}
+void deletenode (struct node *head,int posdata)
+{
+    struct node * posnode=head->next;
+    while (posnode->data!=posdata)
+    {
+
+        if (posnode==head)
+        {
+            printf("未找到该元素，无法删除");
+            return ;
+        }
+         posnode=posnode->next;
+    }
+    posnode->prior->next=posnode->next;
+    posnode->next->prior=posnode->prior;
+    free(posnode);
+}
+void prinlist(struct node *head)
+{
+    struct node * move=head->next;
+    while (move!=head)
+    {
+        printf("%4d",move->data);
+        move=move->next;
+    }
+    printf("\n");
+}
+void insert (struct node * head,int newdata,int newpos)
+{
+    struct node * move=head;
+    struct node * newnode=createnode(newdata);
+    int i;
+    for (i=0;i<newpos;i++)
+    {
+        move=move->next;
+        if (move==head)
+        {
+            printf("未找到该位置\n");
+            return ;
+        }
+    }
+    newnode->prior=move;
+    newnode->next=move->next;
+    move->next->prior=newnode;
+    move->next=newnode;
+}
+int main()
+{
+    struct node * list =createlist();
+    int data,i,x;
+    printf("请输入节点数据个数\n");
+    scanf("%d",&x);
+    printf("请依次输入各节点数据\n");
+    for (i=0;i<x;i++)
+    {
+        scanf("%4d",&data);
+        insertbytail(list,data);
+    }
+    prinlist(list);
+    int newdata,newpos;
+    printf("请依次输入新节点位置（0——%d）及新数据\n",x);
+    scanf("%d %d",&newpos,&newdata);
+    insert(list,newdata,newpos);
+    prinlist(list);
+    int posdata;
+    printf("请输入要删除的元素\n");
+    scanf("%d",&posdata);
+    int num=numdelete(list,posdata);
+    if (num==0)
+    {
+        printf("未找到该元素 无法删除\n");
+    }
+    else
+    {
+        for (i=0; i<num; i++)
+        {
+            deletenode(list,posdata);
+        }
+    }
+
+    prinlist(list);
+    return 0;
+}

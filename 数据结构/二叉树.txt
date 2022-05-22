@@ -1,0 +1,118 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct  tree
+{
+    char data;
+    struct tree *lchild;
+    struct tree *rchild;
+}tree,*btree;
+void inittree(btree *bt)
+{
+    char data;
+    scanf("%c",&data);
+    if (data=='#')
+        *bt=NULL;
+    else
+    {
+        *bt=(btree)malloc(sizeof(tree));
+        (*bt)->data=data;
+        inittree(&(*bt)->lchild);
+        inittree(&(*bt)->rchild);
+    }
+}
+int search(btree bt,char key)
+{
+    if (!bt)
+        return 0;
+    else if (bt->data==key)
+        return 1;
+    else if (key<bt->data)
+        return search(bt->lchild,key);
+    else
+        return search(bt->rchild,key);
+}
+void preorder(btree bt)
+{
+    if (bt)
+    {
+        printf("%c",bt->data);
+        preorder(bt->lchild);
+        preorder(bt->rchild);
+    }
+
+}
+void postorder(btree bt)
+{
+    if (bt)
+    {
+        preorder(bt->lchild);
+        preorder(bt->rchild);
+        printf("%c",bt->data);
+    }
+
+}
+void inorder(btree bt)
+{
+    if (bt)
+    {
+        preorder(bt->lchild);
+        printf("%c",bt->data);
+        preorder(bt->rchild);
+    }
+
+}
+int leaf (btree bt,int count)
+{
+    if (bt)
+    {
+        if (bt->lchild!=NULL)
+        {
+            count=leaf(bt->lchild,count);
+        }
+        if (bt->rchild!=NULL)
+        {
+            count=leaf(bt->rchild,count);
+        }
+        if (bt->lchild==NULL&&bt->rchild==NULL)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+int high (btree bt)
+{
+    int ld=0 ,rd=0;
+    if (bt)
+    {
+        ld=high(bt->lchild)+1;
+        rd=high(bt->rchild)+1;
+    }
+    return ld>rd?ld:rd;
+}
+int main()
+{
+    btree bt;
+    printf("按前序遍历输入元素\n");
+    inittree(&bt);
+    printf("\n前序遍历：");
+    preorder(bt);
+    printf("\n中序遍历：");
+    inorder(bt);
+    printf("\n后序遍历：");
+    postorder(bt);
+    char key;
+    /*printf("\n输入你要查询的值");
+    getchar();
+    scanf("%c",&key);
+    if (search(bt,key))
+        printf("存在");
+    else
+        printf("不存在");*/
+    printf("\n");
+    int count=0;
+    printf("叶子结点数量：%d\n",leaf(bt,count));
+    int height;
+    printf("高度:%d\n",high(bt));
+
+}

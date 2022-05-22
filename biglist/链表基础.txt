@@ -1,0 +1,479 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <malloc.h>
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+struct Node* createlist()//创建链表
+{
+    struct Node* head =(struct Node*)malloc(sizeof(struct Node));
+    head->next=NULL;
+    return head;
+}
+struct Node * createnode (int data)//创建新节点
+{
+    struct Node* newnode=(struct Node*)malloc(sizeof(struct Node));
+    newnode->data=data;
+    newnode->next=NULL;
+    return newnode;
+}
+void printlist(struct Node * head)//遍历链表
+{
+    struct Node *move=head->next;
+    while (move)
+    {
+        printf("%d\t",move->data);
+        move=move->next;
+    }
+    printf("\n");
+}
+void insert (struct Node*head,int data)//尾插法
+{
+    struct Node *newnode=createnode(data),*end=head;
+   while (end->next !=NULL)
+   {
+       end= end->next;
+   }
+   newnode->next=NULL;
+   end->next=newnode;
+}
+void deletnode (struct Node*head,int y)
+{
+    struct Node * dnode = head->next;
+    struct Node * prednode=head;
+    if (dnode==NULL)
+        printf("链表为空无法删除");
+    else
+    {
+        while (dnode->data!= y)
+        {
+            prednode=dnode;
+            dnode=prednode->next;
+            if (dnode==NULL)
+            {
+                printf("未找到该元素");
+                return;
+            }
+
+       }
+        prednode->next=dnode->next;
+        free(dnode);
+    }
+}
+int main()
+{
+    struct Node * list=createlist();
+    int m;
+    printf("请输入人数");
+    scanf("%d",&m);
+    int i,x;
+    for (i=0;i<m;i++)
+    {
+        printf("请输入第%d个人的分数",i+1);
+        scanf("%d",&x);
+        insert(list,x);
+    }
+    printlist(list);
+    int y;
+    printf("请输入要删除的分数");
+    scanf("%d",&y);
+    deletnode(list,y);
+    printlist(list);
+    return 0;
+}
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+struct node
+{
+    int data ;
+    struct node *next;
+};
+struct node * createlist ()
+{
+    struct node * head =(struct node *)malloc(sizeof(struct node));
+    head->next=NULL;
+    return head;
+}
+struct node * createnode (int x)
+{
+    struct node * newnode=(struct node *)malloc(sizeof(struct node));
+    newnode->data=x;
+    newnode->next=NULL;
+    return newnode;
+}
+void insert (struct node * head,int x)
+{
+    struct node * newnode=createnode(x),*end=head;
+    while(end->next!=NULL)
+    {
+        end=end->next;
+    }
+    newnode->next=NULL;
+    end->next=newnode;
+}
+void printlist(struct node *head)
+{
+    struct node *move=head->next;
+    while(move)
+    {
+        printf("%d ",move->data);
+        move=move->next;
+    }
+}
+void deletenode  (struct node *head,int data)
+{
+    struct node * move=head->next,*premove=head;
+    if (move==NULL)
+        return ;
+    else
+    {
+        while (move ->data!=data)
+        {
+            premove=move;
+            move=move->next;
+        }
+        if (move==NULL)
+            return ;
+    }
+    premove->next=move->next;
+    free(move);
+}
+int main()
+{
+    struct node * list=createlist();
+    int n=6,i,x,data;
+    printf("输入数组%d个元素的值。\n",n);
+    for (i=0;i<n;i++)
+    {
+        scanf("%d",&x);
+        insert(list,x);
+    }
+    printf("此链表各个结点的数据域为：");
+    printlist(list);
+    printf("输入要删除的数据x: ");
+    scanf("%d",&data);
+    printf("删除后链表各个结点的数据域为：");
+    deletenode(list,data);
+    printlist(list);
+
+}
+
+
+
+
+#include <stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+struct node *createlist()
+{
+    struct node *head=(struct node *)malloc(sizeof(struct node));
+    head->next=NULL;
+    return head;
+};
+struct node *createnode(int data)
+{
+    struct node * newnode=(struct node *)malloc(sizeof(struct node));
+    newnode->data=data;
+    newnode->next=NULL;
+    return newnode;
+};
+void insert (struct node *head,int data)
+{
+    struct node *newnode=createnode(data),*end=head;
+    while (end->next!=NULL)
+    {
+        end=end->next;
+    }
+    newnode->next=NULL;
+    end->next=newnode;
+}
+void deletenode(struct node *head,int y)
+{
+    struct node * dnode = head->next;
+    struct node * prednode=head;
+        while (dnode->data!= y)
+        {
+            prednode=dnode;
+            dnode=prednode->next;
+       }
+        prednode->next=dnode->next;
+        free(dnode);
+}
+void finddeletenode (struct node *head,int a[],int b[])
+{
+    struct node *move=head->next;
+    int i=0,j=0;
+    while (move)
+    {
+        for(i=0; a[i]!='\0'; i++)
+        {
+            if (move->data==a[i])
+            {
+                    b[j]=a[i];
+                    j++;
+            }
+        }
+        move=move->next;
+    }
+    b[j]='\0';
+}
+
+void printlist (struct node *head)
+{
+    struct node *move=head->next;
+    while (move)
+    {
+        printf("%4d",move->data);
+        move=move->next;
+    }
+}
+int main()
+{
+    struct node *list1=createlist();
+    printf("请输入链表数据(整型)并以空格空开,以-1为最后一个数,回车结尾:\n");
+    int data;
+    do {
+        scanf("%d",&data);
+        insert(list1,data);
+    }while (data!=-1);
+    printf("请输入链表数据(整型)并以空格空开,以-1为最后一个数,回车结尾:\n");
+    int i=0,a[20],b[20];
+    do {
+        scanf("%d",&data);
+        a[i]=data;
+        i++;
+    }while (data!=-1);
+    a[i]='\0';
+    int x;
+    printf("输出A链表中删除后的结点信息:\n");
+    finddeletenode(list1,a,b);
+    for (i=0;b[i]!='\0';i++)
+    {
+        x=b[i];
+        deletenode(list1,x);
+    }
+    printlist(list1);
+}
+
+
+
+#include <stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+struct node *createlist()
+{
+    struct node *head=(struct node *)malloc(sizeof(struct node));
+    head->next=NULL;
+    return head;
+};
+struct node *createnode(int data)
+{
+    struct node * newnode=(struct node *)malloc(sizeof(struct node));
+    newnode->data=data;
+    newnode->next=NULL;
+    return newnode;
+};
+void insert (struct node *head,int data)
+{
+    struct node *newnode=createnode(data),*end=head;
+    while (end->next!=NULL)
+    {
+        end=end->next;
+    }
+    newnode->next=NULL;
+    end->next=newnode;
+}
+void finddeletenode (struct node *head,int a[],int b[])
+{
+    struct node *move=head->next;
+    int i=0,j=0;
+    while (move)
+    {
+        for(i=0; a[i]!='\0'; i++)
+        {
+            if (move->data==a[i])
+            {
+               b[j]=a[i];
+               j++;
+            }
+        }
+        move=move->next;
+    }
+    b[j]='\0';
+}
+void deletnode (struct node*head,int y)
+{
+
+      struct node * dnode = head->next;
+      struct node * prednode=head;
+        while (dnode->data!= y)
+        {
+            prednode=dnode;
+            dnode=prednode->next;
+        }
+        prednode->next=dnode->next;
+        free(dnode);
+
+}
+void printlist (struct node *head)
+{
+    struct node *move=head->next;
+    while (move)
+    {
+        printf("%4d",move->data);
+        move=move->next;
+    }
+}
+int main()
+{
+    struct node *list1=createlist();
+    printf("请输入链表数据(整型)并以空格空开,以-1为最后一个数,回车结尾:\n");
+    int data;
+    do {
+        scanf("%d",&data);
+        insert(list1,data);
+    }while (data!=-1);
+    printf("请输入链表数据(整型)并以空格空开,以-1为最后一个数,回车结尾:\n");
+    int i=0,a[20];
+    do {
+        scanf("%d",&data);
+        a[i]=data;
+        i++;
+    }while (data!=-1);
+    a[i]='\0';
+    int b[20],x;
+    printf("输出A链表中删除后的结点信息:\n");
+    finddeletenode(list1,a,b);
+    for (i=0;b[i]!='\0';i++)
+    {
+        x=b[i];
+        deletnode(list1,x);
+    }
+    printlist(list1);
+}
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+struct grade {         
+    int score;
+    char ID[6];
+    struct grade *next;
+}          ;
+typedef struct grade NODE;  
+struct grade *create();   
+NODE *insert(NODE *head, NODE *pnew, int i);   
+void display(NODE *head);   
+void Pfree(NODE *head);    
+int main() {           
+    struct grade *head, *pnew;//1
+    int n;
+    head = create();//1
+    if (head == NULL)
+        return 0;
+    printf("创建的链表：\n");
+    display(head); //1
+    pnew=(NODE *)malloc(sizeof(NODE));
+    printf("请输入要插入结点的成绩和ID:\n");
+    scanf("%d,%s",&pnew->score,pnew->ID);//1
+    getchar();
+    printf("请输入要插入结点的位置,在这个位置后面插入新结点：\n");
+    scanf("%d",&n); //1
+    head=insert(head, pnew, n);//1
+    printf("插入后的链表：\n");
+    display(head);//1
+    Pfree(head);//1
+    return 0;
+}          
+struct grade *create()  //2
+{          
+    NODE *head, *tail, *pnew;//1
+    int score;
+    char ID[6];
+    head = (NODE *)malloc(sizeof(NODE));
+    if (head == NULL) {        
+        printf("创建失败！");
+        return NULL;
+    }
+    head->next = NULL;
+    tail = head;//1
+    printf("输入学生成绩和ID：\n");
+    while (1)  //1
+    {          
+        scanf("%d,%s",&score,ID);
+        if (score<0)//1
+            break;
+        pnew = (NODE *)malloc(sizeof(NODE));//1
+        if (pnew == NULL) {        
+            printf("创建失败！");
+            return NULL;
+        }
+        pnew->score = score;
+        strcpy(pnew->ID, ID);
+        pnew->next = NULL;
+        tail->next = pnew;//1
+        tail = pnew;//1
+    }
+ 
+    return head;//1
+}          
+NODE *insert(NODE *head, NODE *pnew, int i) //2
+{          
+    NODE *p; //1
+    int j;
+ 
+    p = head;
+    for (j = 0; j<i&&p != NULL; j++)//1
+        p = p->next;//1
+ 
+    if (p == NULL)//1
+    {          
+        printf("插入的节点不存在！");
+        return head; //1
+    }
+ 
+    pnew->next = p->next;//1
+    p->next = pnew; //1
+    return head; //1
+}          
+ 
+void display(NODE *head) //2
+{          
+    NODE *p; //1
+    for (p = head->next; p != NULL; p = p->next)//2
+        printf("%d,%s\n", p->score, p->ID);//1
+}          
+ 
+void Pfree(NODE *head)  //2
+{          
+    NODE *p, *q;//1
+    p = head;
+    while (p->next != NULL)//1
+    {          
+        q = p->next;
+        p->next = q->next;//1
+        free(q); //1
+    }
+    free(p);
+} 

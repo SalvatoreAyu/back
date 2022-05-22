@@ -1,0 +1,198 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include <string.h>
+struct node
+{
+    int id;
+    char name[20];
+    float score;
+    struct node* next;
+
+};
+struct node* createlist()
+{
+    struct node* head=(struct node*)malloc(sizeof(struct node));
+    head->next=NULL;
+    return head;
+}
+struct node * createnode(int id,char name[],float score)
+{
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->id=id;
+    strcpy(newnode->name,name);
+    newnode->score=score;
+    newnode->next=NULL;
+    return newnode;
+}
+void insert (struct node*head,int id,char name[],float score)
+{
+    struct node* newnode=createnode(id,name,score),*end=head;
+    while(end->next!=NULL)
+    {
+        end=end->next;
+    }
+    newnode->next=NULL;
+    end->next=newnode;
+}
+void printlist (struct node *head)
+{
+    struct node *move=head->next;
+    printf("所有学生的成绩：\n");
+    printf("ID     姓名      成绩\n");
+    while (move)
+    {
+        printf(" %-5d  %-8s  %-4.2f\n",move->id,move->name,move->score);
+        move=move->next;
+    }
+}
+void sortlist (struct node*head,int m)
+{
+    int i=0;
+    struct node* pre=head,*move,*after;
+    move=pre->next,after=move->next;
+    for (pre; after->next!=NULL  ;   )
+    {
+            if (move->score < after->score)
+            {
+                move->next=after->next;
+                pre->next=after;
+                after->next=move;
+            }
+            pre=pre->next,move=move->next,after=after->next;
+    }
+    printf("前三名学生的成绩:\n");
+    printf("ID     姓名      成绩\n");
+    struct node *newmove=head->next;
+    for (i=0;i<3;i++)
+    {
+        printf(" %-5d  %-8s  %-4.2f\n",newmove->id,newmove->name,newmove->score);
+        newmove=newmove->next;
+    }
+}
+int main()
+{
+    struct node* list=createlist();
+    int m,i;
+    int id;
+    char name[20];
+    float score;
+    printf("请输入学生人数：\n");
+    scanf("%d",&m);
+    for(i=0;i<m;i++)
+    {
+        printf("请输入第%d个学生的ID、姓名和成绩:",i+1);
+        scanf("%d %s %f",&id,name,&score);
+        getchar();
+        insert(list,id,name,score);
+    }
+    printlist(list);
+    sortlist(list,m);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include<stdlib.h>
+#include <string.h>
+struct node
+{
+    int data;
+    struct node* next;
+
+};
+struct node* createlist()
+{
+    struct node* head=(struct node*)malloc(sizeof(struct node));
+    head->next=NULL;
+    return head;
+}
+struct node * createnode(int data )
+{
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=data;
+    newnode->next=NULL;
+    return newnode;
+}
+void insert (struct node*head,int data)
+{
+    struct node* newnode=createnode(data),*end=head;
+    while(end->next!=NULL)
+    {
+        end=end->next;
+    }
+    newnode->next=NULL;
+    end->next=newnode;
+}
+void printlist (struct node *head)
+{
+    struct node *move=head->next;
+    while (move)
+    {
+        printf("%d ",move->data);
+        move=move->next;
+    }
+}
+void charu (struct node *head,int x)
+{
+    struct node *s=createnode(x),*p,*pre;
+    if (head == NULL)
+    {
+        /*h为空链表*/
+        s->next = NULL;
+        head = s;
+    }
+    if (x <= head->data)
+    {
+        /*x不大于链表中第一个结点的数据域，将s插入链首*/
+        s->next = head;
+        head = s;
+    }
+    else
+    {
+        p = head;
+        while (p && x > p->data)
+        {
+            /*如果p不空，且x不大于p所指结点的数据域,p后移，pre为p的前驱*/
+           pre = p;
+            p = p->next;
+        }
+        /*将s插入到pre所指结点之后。*/
+        s->next = pre->next;
+        pre->next = s;
+    }
+}
+int main()
+{
+    struct node* list=createlist();
+    int a[100],i;
+    printf("输入数组6个元素的值。\n");
+    for (i=0;i<6;i++)
+    scanf("%d",&a[i]);
+        for (i=0;i<6;i++)
+    insert(list,a[i]);
+    printf("此链表各个结点的数据域为：");
+    printlist(list);
+    int x;
+    printf("\n");
+    printf("输入要插入的数据x:");
+    scanf("%d",&x);
+    charu(list,x);
+    printlist(list);
+
+}

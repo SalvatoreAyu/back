@@ -1,0 +1,176 @@
+#include <stdio.h>
+#include <ctype.h>
+#include<string.h>
+void zhongjian(char str[], char x[10][100]);
+int shuzi(char str[]);
+int kongge (char str[]);
+int main()
+{
+    char str[100],x[10][100];
+    gets(str);
+    int i,j;
+    for (i=0;i<100;i++)
+        str[i]=0;
+    for (i=0;i<10;i++)
+    {
+        for (j=0;j<100;j++)
+            x[i][j]=0;
+    }
+    if (shuzi(str))
+        printf("error");
+    else
+    {
+        if (kongge(str))
+        {
+            zhongjian(str,x);
+            for (i=0;x[i][0]!='\0'; i++)
+            {
+                puts(x[i]);
+            }
+        }
+
+    }
+
+}
+int shuzi(char str[])
+{
+    int i,flag=0;
+    for (i=0;str[i]!=0;i++)
+    {
+        if (str[i]>='0'&&str[i]<='9')
+            flag=1;
+    }
+    if (flag)
+        return 1;
+    else
+        return 0;
+}
+int kongge (char str[])
+{
+    int i,flag=0;
+    for (i=0;str[i]!=0;i++)
+    {
+        if (isspace(str[i]))
+            flag=1;
+    }
+    if (flag)
+        return 1;
+    else
+        return 0;
+}
+void zhongjian(char str[], char x[10][100])
+{
+    int i,j,k;
+    for (i=0,j=0;str[i]!='\0';i++)
+    {
+        if (isalpha(str[i]))
+        {
+            x[j][k]=str[i];
+            k++;
+        }
+        else
+        {
+            j++;
+            k++;
+        }
+    }
+}
+#include <stdio.h>
+#include<stdlib.h>
+#include <string.h>
+struct node
+{
+    int id;
+    char name[20];
+    float score;
+    struct node* next;
+
+};
+struct node* createlist()
+{
+    struct node* head=(struct node*)malloc(sizeof(struct node));
+    head->next=NULL;
+    return head;
+}
+struct node * createnode(int id,char name[],float score)
+{
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->id=id;
+    strcpy(newnode->name,name);
+    newnode->score=score;
+    newnode->next=NULL;
+    return newnode;
+}
+void insert (struct node*head,int id,char name[],float score)
+{
+    struct node* newnode=createnode(id,name,score),*end=head;
+    while(end->next!=NULL)
+    {
+        end=end->next;
+    }
+    newnode->next=NULL;
+    end->next=newnode;
+}
+void printlist (struct node *head)
+{
+    struct node *move=head->next;
+    printf("所有学生的成绩：\n");
+    printf("ID     姓名      成绩\n");
+    while (move)
+    {
+        printf(" %-5d  %-8s  %-4.2f\n",move->id,move->name,move->score);
+        move=move->next;
+    }
+}
+void sortlist (struct node*head,int m)
+{
+    int i=0,idt;
+    float scoret;
+    char namet[20];
+    struct node *move=head->next;
+        while (move->next->next!=NULL)
+        {
+            if (move->score<move->next->score)
+            {
+                idt=move->id;
+                move->id=move->next->id;
+                move->next->id=idt;
+                scoret=move->score;
+                move->score=move->next->score;
+                move->next->score=scoret;
+                strcpy(namet,move->next->name);
+                strcpy(move->next->name,move->name);
+                strcpy(move->name,namet);
+            }
+            move=move->next;
+
+        }
+    printf("前三名学生的成绩:\n");
+    printf("ID     姓名      成绩\n");
+    struct node *newmove=head->next;
+    for (i=0;i<3;i++)
+    {
+        printf(" %-5d  %-8s  %-4.2f\n",newmove->id,newmove->name,newmove->score);
+        newmove=newmove->next;
+    }
+}
+int main()
+{
+    struct node* list=createlist();
+    int m,i;
+    int id;
+    char name[20];
+    float score;
+    printf("请输入学生人数：\n");
+    scanf("%d",&m);
+    for(i=0;i<m;i++)
+    {
+        printf("请输入第%d个学生的ID、姓名和成绩:",i+1);
+        scanf("%d %s %f",&id,name,&score);
+        getchar();
+        insert(list,id,name,score);
+    }
+    printlist(list);
+    sortlist(list,m);
+
+}

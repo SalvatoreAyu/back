@@ -1,0 +1,101 @@
+import pandas as pd
+import os
+
+path1 = os.getcwd()+'\\2015.csv'
+path2 = os.getcwd()+'\\2016.csv'
+path3 = os.getcwd()+'\\2017.csv'
+f1= open(path1, encoding='utf-8')
+f2 = open(path2, encoding='utf-8')
+f3 = open(path3, encoding='utf-8')
+df_2015= pd.read_csv(f1)
+df_2016= pd.read_csv(f2)
+df_2017= pd.read_csv(f3)
+#print(data)
+#print(data.describe())
+print(data.shape)
+print(list(data))
+
+
+东亚热力图：
+f,ax=plt.subplots(figsize=(25,25))
+d = data_2015.loc[lambda data_2015: data_2015['Region'] == 'Eastern Asia']
+matrix = np.triu(d.corr())
+sns.heatmap(d.corr(), annot=True, mask=matrix,vmin=-1,vmax=1, center= 0, cmap= 'Blues')
+plt.xticks(rotation=30, fontsize=8)
+plt.yticks(rotation=30, fontsize=8)
+plt.show()
+南非洲热力图：
+f,ax=plt.subplots(figsize=(25,25))
+d = data_2015.loc[lambda data_2015: data_2015['Region'] == 'Sub-Saharan Africa']
+matrix = np.triu(d.corr())
+sns.heatmap(d.corr(), annot=True, mask=matrix,vmin=-1,vmax=1, center= 0, cmap= 'Blues')
+plt.xticks(rotation=30, fontsize=8)
+plt.yticks(rotation=30, fontsize=8)
+plt.show()
+
+
+离散图 (幸福度与经济)：
+data_2015.plot(kind='scatter',x='Happiness Score',y='Economy (GDP per Capita)',color='red',alpha=.5)
+plt.xlabel('Score')
+plt.ylabel('Economy')
+plt.title('Scatter of Happiness and Economy')
+plt.show()
+
+离散图 (健康与经济)：
+data_2015.plot(kind='scatter',x='Economy (GDP per Capita)',y='Health (Life Expectancy)',color='red',alpha=.5)
+plt.xlabel('Economy')
+plt.ylabel('Health')
+plt.title('Economy vs Health')
+plt.show()
+
+import numpy as np 
+import pandas as pd 
+import seaborn as sns
+import matplotlib.pyplot as plt
+import os
+path1 = os.getcwd()+'\\2015.csv'
+f1= open(path1, encoding='utf-8')
+data_2015= pd.read_csv(f1)
+data_2015.plot(kind='scatter',x='Economy (GDP per Capita)',y='Health (Life Expectancy)',color='red',alpha=.5)
+plt.xlabel('Economy')
+plt.ylabel('Health')
+plt.title('Economy vs Health')
+plt.show()
+
+
+
+
+
+# 循环遍历打印出和列属性
+# for i in data:
+#     print(data[0].columns)
+
+# 打印出数据类型
+# print(data[0].dtypes)
+
+# 检查空值
+# [print('data_', i+2015, '\n', data[i].isnull().any())
+#  for i in range(len(list(data)))]
+
+# for j in range(len(data)):
+#     print('data:', j+2015, data[j][data[j]['Country']
+#                                    == 'United Arab Emirates']['Government Trust'])
+
+economy = []
+family = []
+health = []
+regions = list(data[1]['Region'].unique())
+for i in regions:
+    region = data[1][data[1]['Region'] == i]
+    economy.append(sum(region.Economy)/len(region))
+    family.append(sum(region['Life Expectancy'])/len(region))
+    health.append(sum(region['Social Support']) / len(region))
+
+plt.figure(figsize=(20, 15))
+sns.barplot(x=economy, y=regions, color='yellow', alpha=0.5, label='Economy')
+sns.barplot(x=family, y=regions, color='red', alpha=0.5, label='Family')
+sns.barplot(x=health, y=regions, color='black', alpha=0.5, label='Health')
+plt.legend(loc='lower right')
+plt.xlabel('Economy Family Healths influences to Happiness', fontsize=25)
+plt.yticks(rotation=45)
+plt.show()

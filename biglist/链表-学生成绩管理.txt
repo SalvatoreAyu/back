@@ -1,0 +1,463 @@
+#include <stdio.h>
+//#include<malloc.h>
+#include <stdlib.h>
+#include<string.h>
+//void Pfree(struct Student  *PStudent);
+typedef struct Student
+{
+    int ID;
+    char name[10];
+    float score;
+    struct Student *pNextNode;
+}                      Student, *PStudent;
+
+//建立节点
+PStudent ByeNode(int _ID, char _name[], float _score)
+{
+    PStudent pNewNode = (PStudent)malloc(sizeof(struct Student));   //1
+    if (NULL != pNewNode)         //1
+    {
+        pNewNode->ID = _ID;
+        strcpy(pNewNode->name , _name);
+        pNewNode->score = _score;
+        pNewNode->pNextNode = NULL;     //1
+    }
+    return pNewNode;
+}
+
+// 尾插法建立单链表
+void InsertTail(PStudent* pHead, int _ID, char _name[], float _score)//2
+{
+    PStudent pNode = NULL; //1
+    PStudent pNewNode = NULL;
+    //  assert(pHead);
+    if (NULL == (*pHead))     //1
+    {
+        *pHead = ByeNode(_ID, _name, _score); //1
+    }
+    else
+    {
+        pNode = *pHead;
+        while (NULL != pNode->pNextNode)     //1
+        {
+            pNode = pNode->pNextNode;
+        }
+        pNewNode = ByeNode(_ID, _name, _score); //1
+        pNode->pNextNode = pNewNode;
+    }
+}
+void SortList(PStudent pHead)       //2
+{
+    int IDTemp;
+    char nameTemp[10];
+    float scoreTemp;
+    int flag = 0;
+    PStudent pTailNode = NULL;     //1
+
+
+    if (NULL == pHead)          //1
+    {
+        return ;
+    }
+    else
+    {
+        flag = 0;
+        pTailNode = NULL;
+        while (pTailNode != pHead)  //1
+        {
+            PStudent pPreNode = pHead;   //1
+            while (pPreNode->pNextNode != pTailNode)    //1
+            {
+                PStudent pCurNode = pPreNode->pNextNode;  //1
+                if (pPreNode->score < pCurNode->score)
+                {
+                    IDTemp = pPreNode->ID;
+                    strcpy(nameTemp , pPreNode->name);
+                    scoreTemp = pPreNode->score;
+
+                    pPreNode->ID = pCurNode->ID;
+                    strcpy(pPreNode->name , pCurNode->name);
+                    pPreNode->score = pCurNode->score;
+
+                    pCurNode->ID = IDTemp;
+                    strcpy(pCurNode->name, nameTemp);
+                    pCurNode->score = scoreTemp;
+
+                    flag = 1;
+                }
+                pPreNode = pPreNode->pNextNode;//1
+            }
+            if (0 == flag)
+            {
+                break;
+            }
+            pTailNode = pPreNode;    //1
+        }
+    }
+}
+
+//从头到尾打印单链表
+void PrintList(PStudent pHead, int n)  //2
+{
+    int count = 0;
+    PStudent tempPnode = NULL;        //1
+    tempPnode = pHead;         //1
+    if (NULL != pHead)
+    {
+        while (tempPnode != NULL)   //1
+        {
+            if (count < n)
+            {
+                printf("%-5d  %-8s  %-4.2f\n", tempPnode->ID, tempPnode->name, tempPnode->score);
+                tempPnode = tempPnode->pNextNode;     //1
+                count++;
+            }
+            else if (count == n)
+            {
+                break;
+            }
+        }
+    }
+}
+void Pfree(struct Student *PStudent)//2
+{
+    struct Student *p, *q; //1
+    p = PStudent;
+    while (p->pNextNode != NULL) //1
+    {
+        q = p->pNextNode;
+        p->pNextNode = q->pNextNode;//1
+        free(q);//1
+    }
+    free(p);
+}
+
+int main(void)
+{
+    PStudent pList1 = NULL;
+    PStudent tempPnode = NULL;        //1
+    int i = 0;
+    int tempID = 0;
+    char tempname[10];
+    float tempscore;
+    int n = 0;
+
+    printf("请输入学生人数：\n");
+    scanf("%d", &n);          //1
+
+    for (i = 0; i < n; i++)  //1
+    {
+        printf("请输入第%d个学生的ID、姓名和成绩:", i + 1);
+        scanf("%d %s %f", &tempID, tempname, &tempscore);     //1
+        //  printf("%d %s %f\n", tempID, tempname, tempscore);
+        InsertTail(&pList1, tempID, tempname, tempscore);                   //1
+    }
+
+    printf("所有学生的成绩：\n");
+    printf("ID     姓名      成绩\n");
+    PrintList(pList1, n);                        //1
+    SortList(pList1);                            //1
+    printf("前三名学生的成绩:\n");
+    printf("ID     姓名      成绩\n");
+    PrintList(pList1, 3);
+    Pfree(pList1);                                //1
+    return 0;
+}
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include <string.h>
+//#include<conio.h>
+//构造体
+struct student{            
+    int id;          //学生学号
+    int score;          //考试成绩
+    struct student *next;
+}              *head; //1
+  
+//函数声明
+void creat();
+void output();
+void delet(int id);
+void Pfree(struct student *head);
+  
+int main()               
+{   int id ;  //1
+    creat();                        //1
+    printf("学生的成绩信息为：\n");
+    printf("id score\n");
+    output();              //1
+    printf("请输入需要删除成绩信息的学号：\n");  
+    scanf("%d",&id); //1
+    delet(id);              //2
+    Pfree(head);      //1
+}              
+//创建单链表保存学生信息，并输出学生信息
+void  creat()   //2
+{                          
+    int number,i;
+    struct student *q ,*tail;     //1
+     struct student *out;
+    head =(struct student*)malloc(sizeof(struct student));        //1
+    head->next = NULL; 
+      
+    tail = head;                     //1
+    printf("请输入班级人数：\n");
+    scanf("%d",&number);
+    printf("请依次输入每个学生的学号 成绩\n");
+    for( i = 0;i<number;i++)       //1
+    {                         
+        printf("请输入第%d个学生的成绩信息：\n",i+1);
+        q =(struct student*)malloc(sizeof(struct student));       //1
+        q->next = NULL;                          //1
+        scanf("%d %d",&q->id,&q->score);   //1
+        tail->next = q;                        //1
+        tail = q;
+}              
+    
+     
+}              
+  
+void output()   //2
+{                
+ struct student *out;   //1
+  out = head->next;                  
+    while(out)  //1
+    {              
+        printf("%d %d\n",out->id,out->score);   //1    
+        out = out->next;                 //1
+    }
+}              
+void delet(int id) //2
+{              
+   struct student *p, *q = NULL; //1
+  //  int j;
+    q=head;
+    p=head->next;
+    for ( ;p->id !=id; )//2
+    {              
+        q=p;                  
+        p = p->next;                 //1
+        if (p == NULL)                 //1
+        {printf("不存在！");
+        return;}
+    }
+    q->next=p->next;                //1
+    printf("删除成功！\n");
+    output();                           //1
+    free(p);                   //1
+}              
+  
+void Pfree(struct student *head)//2
+{              
+   struct student *p, *q; //1
+    p = head;
+    while (p->next != NULL) //1
+    {              
+        q = p->next;
+        p->next = q->next;//1
+        free(q);//1
+    }
+    free(p);
+}  
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+struct node
+{
+    int ID;          //学生学号
+    char name[10];     //学生姓名
+    float score;          //最终得分
+    struct node *next;
+};
+struct node *createlist()
+{
+    struct node *head=(struct node *)malloc(sizeof(struct node));
+    head->next=NULL;
+    return head;
+};
+struct node *createnode(int id,char name[],float score)
+{
+    struct node *newnode =(struct node *)malloc(sizeof(struct node));
+    newnode->ID=id;
+    newnode->score=score;
+    strcpy(newnode->name,name);
+    newnode->next=NULL;
+    return newnode;
+};
+void insert (struct node *head,int id,char name[],float score)
+{
+    struct node *newnode=createnode(id,name,score);
+    struct node *end=head;
+    while (end->next!=NULL)
+    {
+        end=end->next;
+    }
+    newnode->next=NULL;
+    end->next=newnode;
+}
+void sortlist (struct node *head)
+{
+    struct node *premove=head->next,*move;
+    int tid;
+    float tscore;
+    char tname[20];
+    for (;premove->next->next!=NULL;)
+    {
+        move=premove->next;
+        for (;move->next!=NULL;)
+        {
+                if (premove->score<move->score)
+                {
+                   tid=premove->ID;
+                   premove->ID=move->ID;
+                   move->ID=tid;
+                   tscore=premove->score;
+                   premove->score=move->score;
+                   move->score=tscore;
+                   strcpy(tname,premove->name);
+                   strcpy(premove->name,move->name);
+                   strcpy(move->name,tname);
+                }
+                move=move->next;
+        }
+        premove=premove->next;
+    }
+}
+void printlist (struct node *head)
+{
+    struct node *move=head->next;
+    while (move)
+    {
+        printf("%d  %s  %.2f\n",move->ID,move->name,move->score);
+        move=move->next;
+    }
+}
+int main()
+{
+    struct node *list=createlist();
+    printf("input number of person:\n");
+    int n,i;
+    scanf("%d",&n);
+    printf("Please input user ID and name:\n");
+    int id,score1,score2,score3,score4,score5;
+    char name[20];
+    float sum;
+    for (i=0;i<n;i++)
+    {
+        printf("Input ID and name:\n");
+        scanf("%d %s",&id,name);
+        printf("Input 5 scores:\n");
+        scanf("%d %d %d %d %d",&score1,&score2,&score3,&score4,&score5);
+        sum=(float)(score1+score2+score3+score4+score5);
+        insert(list,id,name,sum/5.0);
+    }
+    sortlist(list);
+    printf("print the sorted list:\n");
+    printlist(list);
+}
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+struct book {               
+    char ID[10];
+    char name[20];
+    struct book *next;
+}               ;
+typedef struct book NODE;  
+struct book *create();   
+void pdelete(NODE *head, char id[]);
+void display(NODE *head);   
+void Pfree(NODE *head);    
+int main() {                
+    struct book *head, *pnew; //1 
+    char id[10];//1
+    head = create();  //1
+    if (head == NULL) 
+        return 0;
+    printf("创建的链表：\n");
+    display(head);  //1 
+    printf("请输入要删除图书的编号：\n");
+    scanf("%s",id);//1
+    pdelete(head, id); //1
+    printf("删除后的链表：\n");
+    display(head); //1
+    Pfree(head);//1
+    return 0;
+}               
+ 
+struct book *create()  //2
+{               
+    NODE *head, *tail, *pnew;//1
+    char ID[10],name[20];
+    head = (NODE *)malloc(sizeof(NODE)); //1
+    if (head == NULL) {             
+        printf("创建失败！");
+        return NULL;
+    }
+    head->next = NULL; 
+    tail = head;    
+    printf("输入图书的编号和书名：\n");
+    while (1)//1 
+    {               
+        scanf("%s %s",ID,name); 
+        if (strcmp(ID,"0")==0)//1
+            break;   
+        pnew = (NODE *)malloc(sizeof(NODE));//1
+        if (pnew == NULL) 
+        {               
+            printf("创建失败！");
+            return NULL;
+        }
+        strcpy(pnew->ID, ID);  
+        strcpy(pnew->name, name);
+        pnew->next = NULL; 
+        tail->next = pnew;//1
+        tail = pnew;  //1
+    }
+    return head; //1
+}               
+ 
+void pdelete(NODE *head, char id[]) //2
+{               
+    NODE *p, *q; //1
+    int j;
+    p = head; 
+    for ( ; strcmp(p->ID,id)!=0; )//2
+    {               
+        q=p; //1
+        p = p->next; //1
+        if (p == NULL)//1
+        {printf("不存在！");
+        return;}
+    }
+    q->next=p->next; //1
+    free(p);  //1
+}               
+void display(NODE *head) //2
+{               
+    NODE *p; //1
+    for (p = head->next; p!= NULL; p = p->next) //2
+        printf("%s,%s\n", p->ID, p->name); //1
+}               
+ 
+void Pfree(NODE *head)//2
+{               
+    NODE *p, *q; //1
+    p = head;
+    while (p->next != NULL) //1
+    {               
+        q = p->next;
+        p->next = q->next;//1
+        free(q);//1
+    }
+    free(p);
+}   

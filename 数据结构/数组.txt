@@ -1,0 +1,43 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+    int data;
+    struct node *next;
+}node,*btnode;
+void initlist (btnode *list)
+{
+    *list=(btnode)malloc(sizeof(node));
+    (*list)->next=NULL;
+}
+void insertbytail(btnode head,int data)
+{
+    btnode newnode=(btnode)malloc(sizeof(node));
+    newnode->data=data;
+    newnode->next=NULL;
+    btnode move=head;
+    while (move->next!=NULL)
+    {
+        move=move->next;
+    }
+    move->next=newnode;
+    newnode->next=NULL;
+}
+void printlist (btnode list)
+{
+    btnode move=list->next;
+    while (move!=NULL)
+    {
+        printf("%d",move->data);
+        move=move->next;
+    }
+}
+int main ()
+{
+    btnode list;
+    initlist(&list);
+    insertbytail(list,1);
+    insertbytail(list,2);
+    insertbytail(list,3);
+    printlist(list);
+}

@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 5
+typedef int Datatype;
+struct mystack
+{
+    int top;
+    Datatype stack[MAX];
+};
+struct mystack *initstack()
+{
+    struct mystack * newstack=(struct mystack *)malloc(sizeof(struct mystack));
+    newstack->top=-1;
+    return newstack;
+}
+int push(struct mystack * newstack,Datatype data)
+{
+    if (newstack->top==MAX-1)
+    {
+        printf("栈满，无法输入");
+        return 0;
+    }
+    else
+    {
+        newstack->stack[++newstack->top]=data;
+        return 1;
+
+}
+void pop(struct mystack *newstack)
+{
+    --newstack->top;
+}
+void gettop(struct mystack *newstack)
+{
+    printf("%4d",newstack->stack[newstack->top]);
+}
+int  empty(struct mystack *newstack)
+{
+    if (newstack->top==-1)
+    {
+        printf("栈已空end....");
+        return 0;
+    }
+    else
+        return 1;
+}
+int main()
+{
+   struct mystack * newstack=initstack();
+   int n,x,i,flag=1;
+   printf("请输入栈元素个数\n");
+   scanf("%d",&n);
+   for (i=0;i<n;i++)
+   {
+       printf("请输入第%d个元素值",i+1);
+       scanf("%d",&x);
+       flag=push(newstack,x);
+       if (flag==0)
+        return 0;
+   }
+    while(empty(newstack))
+    {
+        gettop(newstack);
+        pop(newstack);
+    }
+}

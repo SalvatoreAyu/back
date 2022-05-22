@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <malloc.h>
+#include <stdlib.h>
+#include <math.h>
+#define OK 1
+#define ERROR 0
+#define maxsize 20
+typedef int ElemType;
+typedef int Status;
+typedef struct Qnode
+{
+    ElemType data;
+    struct Qnode *next;
+}Qnode,*Queueptr;
+typedef struct Queue
+{
+    Queueptr front,rear;
+}LinkQueue;
+Status visit(ElemType c)
+{
+    printf("%d ",c);
+    return OK;
+}
+Status Initqueue(LinkQueue *Q)
+{
+    Q->front=Q->rear=(Queueptr)malloc(sizeof(Qnode));
+    if (!Q->front)
+        exit(OVERFLOW);
+    Q->front->next=NULL;
+    return OK;
+}
+Status Enqueue(LinkQueue *Q,ElemType e)
+{
+    Queueptr newnode=(Queueptr)malloc(sizeof(Qnode));
+    if (!newnode)
+        exit(OVERFLOW);
+    newnode->data=e;
+    newnode->next=NULL;
+    Q->rear->next=newnode;
+    Q->rear=newnode;
+    return OK;
+}
+Status Dequeue(LinkQueue *Q,ElemType *e)
+{
+    Queueptr p;
+    if (Q->front==Q->rear)
+        return ERROR;
+    p=Q->front->next;
+    *e=p->data;
+    Q->front->next=p->next;
+    if (Q->rear==p)
+        Q->rear=Q->front;
+    free(p);
+    return OK;
+}
+Status QueueTraverse(LinkQueue Q)
+{
+    Queueptr p;
+    p=Q.front->next;
+    while (p)
+    {
+        visit(p->data);
+        p=p->next;
+    }
+    printf("\n");
+    return OK;
+}
+int main()
+{
+    LinkQueue Q;
+    ElemType d;
+    d=521;
+    Initqueue(&Q);
+    Enqueue(&Q,8);
+    Enqueue(&Q,2);
+    Enqueue(&Q,1);
+    Dequeue(&Q,&d);
+    QueueTraverse(Q);
+
+}
